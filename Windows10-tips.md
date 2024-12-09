@@ -5,11 +5,13 @@
 ## ライセンス認証
 
 + Procy経由でライセンス認証
+
 	```
 	netsh winhttp import proxy source=ie
 	or
 	netsh winhttp set proxy <YOUR PROXY:PORT>
 	```
+
 + ライセンスキー確認
 
 	※ 参考 https://japan.zdnet.com/article/35088128/
@@ -490,6 +492,7 @@
 	```
 
 + プログラム一覧(レジストリ)
+
 	```
 	Get-ChildItem -Path(
 		'HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall',
@@ -497,7 +500,9 @@
 		'HKLM:SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstal') |
 	% { Get-ItemProperty $_.PsPath } | Select-Object -Property DisplayName,DisplayVersion
 	```
+
 + プログラム一覧(WMI)
+
 	```
 	wmic product list
 	Get-WmiObject Win32_Product
