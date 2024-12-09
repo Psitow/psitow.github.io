@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Markdown test</title>
+	<title>Markdown load test</title>
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta http-equiv="Cache-Control" content="no-cache">
 	<!--
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/5.5.2/css/foundation.min.css">
 	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
@@ -10,10 +12,10 @@
 	<script src="https://unpkg.com/showdown/dist/showdown.min.js"></script>
 </head>
 <body>
-	<div id="preview" style="width: 100%; height: 100%;/* border: 1px solid #ccc;*/ padding-left: 10px; margin-top: 10px;"></div>
+	<div id="preview"></div>
 	<script>
 		window.addEventListener("load", async function () {
-			const url = "https://psitow.github.io/Windows10-tips.md";
+			const url = "Windows10-tips.md";
 			try {
 				const response = await fetch(url);
 				if (!response.ok) {
@@ -22,8 +24,7 @@
 
 				var converter = new showdown.Converter();
 				var markdtext = await response.text();
-				var htmldoc = converter.makeHtml(markdtext);
-				document.getElementById('preview').innerHTML = htmldoc;
+				document.getElementById('preview').innerHTML = converter.makeHtml(markdtext);
 			} catch (error) {
 				document.getElementById('preview').innerHTML = "<html><pre>" + error.message + "</pre></html>";
 			}

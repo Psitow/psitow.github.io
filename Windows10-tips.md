@@ -2,7 +2,20 @@
 
 ネットで見つけた情報。カテゴリは適当。
 
-## ライセンス認証
+- [Windows 10 Tips](#windows-10-tips)
+	- [License](#license)
+	- [Drive/Storage](#drivestorage)
+	- [Network](#network)
+	- [Develop](#develop)
+	- [Powershell](#powershell)
+	- [軽量化](#軽量化)
+	- [メンテナンス](#メンテナンス)
+	- [Cygwin](#cygwin)
+	- [Firefox](#firefox)
+	- [その他](#その他)
+	- [(おまけ) Windows 11](#おまけ-windows-11)
+
+## License
 
 + Procy経由でライセンス認証
 
@@ -38,14 +51,15 @@
 	<tr><td>VOLUME_KMSCLIENT channel</td><td>VL版</td></tr>
 	</table>
 
-## Drive / Storage
+## Drive/Storage
 
 + リムーバブルドライブに System Volume Information を作成させない。
 	```
 	gpedit.msc
 	```
 	`ローカルコンピューターポリシー` - `コンピューターの構成` - `管理用テンプレート` - `Windowsコンポーネント` - `検索`<br>
-	<b>リムーバル ドライブ上の場所のライブラリへの追加を許可しない</b> --> <b>有効</b>
+	リムーバル ドライブ上の場所のライブラリへの追加を許可しない --> 有効
+
 	```
 	gpupdate
 	```
@@ -78,11 +92,6 @@
 
 	Windows8では`F8`を押してもブートオプションがデフォルトで抑止されています。<br>
 	コマンドプロンプトから`bcdedit /set advancedoptions on`を入力して 解除してください。
-
-+ IPv6 net use
-	```
-	net use \\2001-cf8-2-405b-0-dddd-f835-9280.ipv6-literal.net\C$
-	```
 
 ## Network
 
@@ -136,13 +145,16 @@
 + プロキシ設定画面が表示されない
 
 	HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer<br>
-	SettingsPageVisibility	[string]hide:proxy <== 削除
+	SettingsPageVisibility	STRING:"hide:proxy" <== 削除
 　
 + 動的ポート数の確認
+
 	```
 	netsh int ipv4 show dynamicport tcp
 	```
+
 + OpenSSH Server
+
 	```
 	PS C:\> Get-WindowsCapability -Online | ? Name -like "*SSH*"
 	PS C:\> Add-WindowsCapability -Online -Name 'OpenSSH.Server~~~~0.0.1.0'
@@ -179,9 +191,16 @@
 	netsh http add iplisten ipaddress=::
 	```
 
++ IPv6 net use
+
+	```
+	net use \\2001-cf8-2-405b-0-dddd-f835-9280.ipv6-literal.net\C$
+	```
+
 ## Develop
 
 + NuGet
+
 	```
 	PS C:\> Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.208
 	警告: URI 'https://go.microsoft.com/fwlink/?LinkID=627338&clcid=0x409' から ''
@@ -192,6 +211,7 @@
 	PS C:\> [Net.ServicePointManager]::SecurityProtocol
 	Tls12
 	```
+
 + SQL Server Express
 
 	<table border=1>
@@ -231,6 +251,7 @@
 
 	1. Windows 10 21H2 の ISO をマウント
 	2. コマンドを打つ。
+
 		```
 		Dism /online /enable-feature /featurename:NetFx3 /All /Source:E:\sources\sxs /LimitAccess
 		```
@@ -268,12 +289,14 @@
 	3. Get-ADUser -Identity 1087487-Z461
 
 	4. Get-LocalUser -Name cpcadmin
-	5. Get-WmiObject Win32_UserAccount | ? { $_.LocalAccount -eq $true }
+	5. Get-WmiObject Win32\_UserAccount | ? { $\_.LocalAccount -eq $true }
 
 + 別ユーザーで実行
+
 	```
 	Start-Process -FilePath 'Cmd.exe' -Verb RunAsUser
 	```
+
 + パフォーマンスが悪い？
 
 	<https://www.intellilink.co.jp/column/ms/2022/041400.aspx>
@@ -282,6 +305,7 @@
 	```
 
 + PowerShell SQLite
+
 	```
 	Install-Module PSSQLite
 	Import-Module PSSQLite
@@ -331,6 +355,7 @@
 	</table>
 
 + SXS Assembly の整理
+
 	```
 	dism /Online /CLeanup-Image /AnalyzeComponentStore
 	dism /Online /CLeanup-Image /StartComponentCleanup
@@ -339,12 +364,14 @@
 ## メンテナンス
 
 + Windows image のリストアと検査
+
 	```
 	dism /online /cleanup-image /restorehealth
 	sfc /scannow
 	```
 
 + windows update 一覧
+
 	```
 	Get-WmiObject win32_quickfixengineering >wupdate.log
 	```
@@ -373,11 +400,13 @@
 	AppData\Roaming\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar
 
 + Fix Event ID 642 ESENT error on Windows 10
+
 	```
 	Dism /Online /Cleanup-Image /StartComponentCleanup
 	Dism /Online /Cleanup-Image /RestoreHealth
 	SFC /scannow
 	```
+
 + Windows 8.1 WPF Clash -- KB4601048
 	+ windows 10 1909 -- KB4601556 で修正
 	+ Windows 10 2004/20H2 -- KB4601554 で修正
@@ -438,7 +467,7 @@
 
 	1. gpupdate /force
 
-	2. (ダメな場合)
+	2. (ダメな場合)<br>
 		HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\LSA
 		NetJoinLegacyAccountReuse (DWORD) ==> 1
 
@@ -532,9 +561,9 @@
 	unzip -Ocp932 hogehoge.zip
 	```
 
-+ Cygwin / Mintty / Wsltty 日本語入力で確定[Enter]すると_A になってしまう。
++ Cygwin / Mintty / Wsltty 日本語入力で確定`Enter`すると_A になってしまう。
 
-	[Options] -> [Keys] -> "ESC/Enter reset IME to alphanumeric" のチェックをはずず。
+	`Options` -> `Keys` -> "ESC/Enter reset IME to alphanumeric" のチェックをはずず。
 
 
 ## Firefox
@@ -571,7 +600,7 @@
 
 	Firefox89から動作が変りました。
 
-	https://support.mozilla.org/ja/kb/about-config-editor-firefox
+	<https://support.mozilla.org/ja/kb/about-config-editor-firefox>
 
 	設定エディター (about:config ページ)を開いて、以下を入力し、trueとなってるのをfalseに変更することでFirefox88までと同じ動作になります。
 	```
@@ -582,13 +611,13 @@
 
 + ??
 
-	[管理用テンプレート] - [ネットワーク/Windows 接続マネージャー]
+	`管理用テンプレート` - `ネットワーク/Windows 接続マネージャー`<br>
 	ドメイン認証されたネットワークに接続しているときに非ドメイン ネットワークへの接続を禁止する ==> 無効 (が、効くかも)
 
 + Windows オーディオ デバイス グラフ アイソレーション
 
-	+ ./WinSxS/amd64_microsoft-windows-audio-audiocore_31bf3856ad364e35_6.3.9600.17415_none_67aabf0db85d32d6/audiodg.exe
-	+ ./WinSxS/amd64_microsoft-windows-audio-audiocore_31bf3856ad364e35_6.3.9600.17893_none_675246b1b89fd44c/audiodg.exe
+	+ ./WinSxS/amd64\_microsoft-windows-audio-audiocore\_31bf3856ad364e35\_6.3.9600.17415\_none\_67aabf0db85d32d6/audiodg.exe
+	+ ./WinSxS/amd64\_microsoft-windows-audio-audiocore\_31bf3856ad364e35\_6.3.9600.17893\_none\_675246b1b89fd44c/audiodg.exe
 
 ## (おまけ) Windows 11
 
@@ -630,5 +659,5 @@
 
 + 明るさ・輝度の自動調整オフ
 
-	[システム]->[ディスプレイ]->[コンテンツに基づいて明るさを変更する]->オフ
+	`システム`->`ディスプレイ`-> `コンテンツに基づいて明るさを変更する`->オフ
 
